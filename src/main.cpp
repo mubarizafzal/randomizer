@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <string>
 #include <vector>
 
@@ -51,10 +52,19 @@ int main () {
   // (otherwise press enter without any input, or whitespace only) which starts the program
 
   vector<string> values;
+  vector<string> formatted;
+
+  cout << "Enter nothing to begin randomized outputting:" << endl;
 
   while (true) {
     getline(cin, temp);
+    
+    if (temp == "") {
+      break;
+    }
+
     values = splitString(temp, ",");
+    
     for (auto&& s: values) {
       for (int i = 0; i < s.size(); i++) {
         if (s[i] != ' ') {
@@ -65,12 +75,23 @@ int main () {
       while (s.back() == ' ') {
         s.pop_back();
       }
-      cout << s << endl;
     }
-    cout << "---------" << endl;
+
+    formatted.reserve(formatted.size() + values.size());
+    for (const auto& s : values) {
+      formatted.emplace_back(s);
+    }
+
+    temp = "";
   }
+  
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> distribution(0, formatted.size() - 1);
+  
+  cout << "Randomized output now beginning!" << endl;
+  cout << "Enter anything to quit:" << endl;
 
-
-
+  cout << formatted[distribution(gen)] << endl;
 
 }
