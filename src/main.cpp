@@ -58,8 +58,15 @@ int main () {
 
   while (true) {
     getline(cin, temp);
+    cout << "this: " << temp << " fin" << endl;
     
     if (temp == "") {
+      cin.clear();
+      //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\0');
+      cin >> temp;
+      getline(cin, temp);
+      cout << "this: " << temp << " fin" << endl;
+    
       break;
     }
 
@@ -92,6 +99,14 @@ int main () {
   cout << "Randomized output now beginning!" << endl;
   cout << "Enter anything to quit:" << endl;
 
-  cout << formatted[distribution(gen)] << endl;
+  while (!true) {
 
+    cout << formatted[distribution(gen)] << endl;
+    getline(cin, temp);
+    if (temp != "") {
+      break;
+    }
+
+  }
+  
 }
