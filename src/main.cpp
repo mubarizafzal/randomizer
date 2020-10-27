@@ -2,6 +2,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -40,33 +41,55 @@ vector<string> splitString (const string& s, const string& delimiters) {
   return ret;
 }
 
-int main () {
+int main (int argc, char** argv) {
 
   string temp;
-
-  // hard delimit on commas
-  // we can reomve leading and trailing whitespaces
-
-  // getline
-  // ask for more input at beginning
-  // (otherwise press enter without any input, or whitespace only) which starts the program
-
   vector<string> values;
   vector<string> formatted;
 
-  cout << "Enter nothing to begin randomized outputting:" << endl;
+  if (argc > 1) {
+
+    ifstream inf(argv[1]);
+   
+    while (true) {
+      
+      getline(inf, temp);
+
+      values = splitString(temp, ",");
+      
+      for (auto&& s: values) {
+        for (int i = 0; i < s.size(); i++) {
+          if (s[i] != ' ') {
+            s = s.substr(i, s.size() - i);
+            break;
+          }
+        }
+        while (s.back() == ' ') {
+          s.pop_back();
+        }
+      }
+
+      formatted.reserve(formatted.size() + values.size());
+      
+      
+      for (const auto& s : values) {
+        formatted.emplace_back(s);
+      }
+      
+      if (inf.eof()) {
+        break;
+      }
+    }
+  }
+
+  cout << "Enter your input, placing commas between different elements." << endl;
+  cout << "Enter nothing to begin randomization." << endl;
 
   while (true) {
+     
     getline(cin, temp);
-    cout << "this: " << temp << " fin" << endl;
-    
+
     if (temp == "") {
-      cin.clear();
-      //cin.ignore(std::numeric_limits<std::streamsize>::max(), '\0');
-      cin >> temp;
-      getline(cin, temp);
-      cout << "this: " << temp << " fin" << endl;
-    
       break;
     }
 
@@ -99,14 +122,14 @@ int main () {
   cout << "Randomized output now beginning!" << endl;
   cout << "Enter anything to quit:" << endl;
 
-  while (!true) {
+  while (true) {
 
     cout << formatted[distribution(gen)] << endl;
+    
     getline(cin, temp);
     if (temp != "") {
       break;
     }
-
   }
   
 }
