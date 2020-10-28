@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -117,15 +118,23 @@ int main (int argc, char** argv) {
   
   random_device rd;
   mt19937 gen(rd());
-  uniform_int_distribution<> distribution(0, formatted.size() - 1);
+  shuffle(formatted.begin(), formatted.end(),gen);
   
-  cout << "Randomized output now beginning!" << endl;
+  cout << "Randomized sequenced output now beginning!" << endl;
   cout << "Enter anything to quit:" << endl;
+
+  int i = 0;
 
   while (true) {
 
-    cout << formatted[distribution(gen)] << endl;
+    if (i == formatted.size()) {
+      i = 0;
+    }
     
+    cout << formatted[i] << endl;
+    
+    ++i;
+
     getline(cin, temp);
     if (temp != "") {
       break;
